@@ -1,2 +1,2 @@
 # csMicrosoftTutorial
-My c# learining with official Microsoft tutorial.
+My C# learining with official Microsoft tutorial.
