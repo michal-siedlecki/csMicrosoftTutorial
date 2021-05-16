@@ -6,7 +6,7 @@ namespace BankApplication
     class BankAccount
     {
         public string Number { get; }
-        public string Owners { get; set; }
+        public string Owner { get; set; }
         public decimal Balance
         {
             get
@@ -23,15 +23,19 @@ namespace BankApplication
         }
        
         private List<Transaction> allTransactions = new List<Transaction>();
-
         private static int accountNumberSeed = 1234567890;
-
-        public BankAccount(string ownerName, decimal initialBalance )
+        public virtual void PerformMonthEndTransactions() { }
+        private readonly decimal minimumBalance;
+        public BankAccount(string name, decimal initialBalance) : this(name, initialBalance, 0) { }
+        public BankAccount(string name, decimal initialBalance, decimal minimumBalance)
         {
-            this.Owners = ownerName;
             this.Number = accountNumberSeed.ToString();
-            MakeDeposit(initialBalance, DateTime.Now, "Initial balance");
-            accountNumberSeed ++;
+            accountNumberSeed++;
+
+            this.Owner = name;
+            this.minimumBalance = minimumBalance;
+            if (initialBalance > 0)
+                MakeDeposit(initialBalance, DateTime.Now, "Initial balance");
         }
 
         public void MakeDeposit (decimal amount, DateTime date, string note)
