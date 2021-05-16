@@ -3,10 +3,13 @@ using System.Collections.Generic;
 
 namespace BankApplication
 {
-    class BankAccount
+    abstract class BankAccount
     {
         public string Number { get; }
-        public string Owner { get; set; }
+        public string OwnerId { get; set; }
+        private static int accountNumberSeed = 1234567890;
+        private readonly decimal minimumBalance;
+        private List<Transaction> allTransactions = new List<Transaction>();
         public decimal Balance
         {
             get
@@ -21,19 +24,14 @@ namespace BankApplication
             }
           
         }
-       
-        private List<Transaction> allTransactions = new List<Transaction>();
-        private static int accountNumberSeed = 1234567890;
-        public virtual void PerformMonthEndTransactions() { }
-        private readonly decimal minimumBalance;
-
-        public BankAccount(string name, decimal initialBalance) : this(name, initialBalance, 0) { }
-        public BankAccount(string name, decimal initialBalance, decimal minimumBalance)
+        
+        public BankAccount(string OwnerId, decimal initialBalance) : this(OwnerId, initialBalance, 0) { }
+        public BankAccount(string OwnerId, decimal initialBalance, decimal minimumBalance)
         {
             this.Number = accountNumberSeed.ToString();
             accountNumberSeed++;
 
-            this.Owner = name;
+            this.OwnerId = OwnerId;
             this.minimumBalance = minimumBalance;
             if (initialBalance > 0)
                 MakeDeposit(initialBalance, DateTime.Now, "Initial balance");
@@ -89,6 +87,8 @@ namespace BankApplication
 
             return report.ToString();
         }
+
+        public virtual void PerformMonthEndTransactions() { }
 
     }
 }

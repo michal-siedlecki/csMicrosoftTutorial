@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BankApplication
 {
     class LineOfCreditAccount : BankAccount
     {
-        public LineOfCreditAccount(string name, decimal initialBalance, decimal creditLimit) : base(name, initialBalance, -creditLimit)
+        public LineOfCreditAccount(string OwnerId, decimal initialBalance, decimal creditLimit) : base(OwnerId, initialBalance, -creditLimit)
         {
         }
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BankApplication
 {
@@ -8,7 +6,7 @@ namespace BankApplication
     {
         private decimal _monthlyDeposit = 0m;
 
-        public GiftCardAccount(string name, decimal initialBalance, decimal monthlyDeposit = 0) : base(name, initialBalance)
+        public GiftCardAccount(string OwnerId, decimal initialBalance, decimal monthlyDeposit = 0) : base(OwnerId, initialBalance)
             => _monthlyDeposit = monthlyDeposit;
 
         public override void PerformMonthEndTransactions()
