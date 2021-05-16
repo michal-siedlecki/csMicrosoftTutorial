@@ -26,6 +26,7 @@ namespace BankApplication
         private static int accountNumberSeed = 1234567890;
         public virtual void PerformMonthEndTransactions() { }
         private readonly decimal minimumBalance;
+
         public BankAccount(string name, decimal initialBalance) : this(name, initialBalance, 0) { }
         public BankAccount(string name, decimal initialBalance, decimal minimumBalance)
         {
@@ -49,18 +50,29 @@ namespace BankApplication
             allTransactions.Add(deposit);
         }
 
-        public void MakeWithdrawal (decimal amonut, DateTime date, string note)
+        public void MakeWithdrawal(decimal amount, DateTime date, string note)
         {
-            if (amonut < 0)
+            if (amount <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(amonut), "Amount of withdrawal must be positive");
+                throw new ArgumentOutOfRangeException(nameof(amount), "Amount of withdrawal must be positive");
             }
-            if (Balance - amonut < 0)
+            var overdraftTransaction = CheckWithdrawalLimit(Balance - amount < minimumBalance);
+            var withdrawal = new Transaction(-amount, date, note);
+            allTransactions.Add(withdrawal);
+            if (overdraftTransaction != null)
+                allTransactions.Add(overdraftTransaction);
+        }
+
+        protected virtual Transaction? CheckWithdrawalLimit(bool isOverdrawn)
+        {
+            if (isOverdrawn)
             {
                 throw new InvalidOperationException("Not sufficient funds for this withdrawal");
             }
-            var transaction = new Transaction(amonut, date, note);
-            allTransactions.Add(transaction);
+            else
+            {
+                return default;
+            }
         }
 
         public string GetAccountHistory()
